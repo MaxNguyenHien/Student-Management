@@ -3,38 +3,34 @@ package Model;
 import java.util.ArrayList;
 
 public class StudentManagement {
-	private ArrayList<Student> listStudent;
+	private ArrayList<Student> studentList;
 
 	public StudentManagement() {
 	}
 
-	public StudentManagement(ArrayList<Student> listStudent) {
-		this.listStudent = listStudent;
+	public StudentManagement(ArrayList<Student> studentList) {
+		this.studentList = studentList;
 	}
 
 	public ArrayList<Student> getListStudent() {
-		return listStudent;
+		return studentList;
 	}
 
-	public void setListStudent(ArrayList<Student> listStudent) {
-		this.listStudent = listStudent;
+	public void setListStudent(ArrayList<Student> studentList) {
+		this.studentList = studentList;
 	}
 	
 	public void insert(Student student) {
-		this.listStudent.add(student);
+		this.studentList.add(student);
 	}
 	
 	public void delete(Student student) {
-		this.listStudent.remove(student);
+		this.studentList.remove(student);
 	}
 	
 	public void update(Student student) {
-		this.listStudent.remove(student);
-		this.listStudent.add(student);
+		this.studentList.remove(student);
+		this.studentList.add(student);
 	}
 
-
-	
-	
-	
 }

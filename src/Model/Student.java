@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Objects;
 
 public class Student {
-	private int code;
+	private int ID;
 	private String name;
 	private String homeTown;
 	private Date dateOfBirth;
@@ -16,7 +16,7 @@ public class Student {
 	public Student() {
 	}
 	public Student(int code, String name, String homeTown, Date dateOfBirth, boolean gender, float score1, float score2, float score3) {
-		this.code = code;
+		this.ID = code;
 		this.name = name;
 		this.homeTown = homeTown;
 		this.dateOfBirth = dateOfBirth;
@@ -26,10 +26,10 @@ public class Student {
 		this.score3 = score3;
 	}
 	public int getCode() {
-		return code;
+		return ID;
 	}
 	public void setCode(int code) {
-		this.code = code;
+		this.ID = code;
 	}
 	public String getName() {
 		return name;
@@ -75,12 +75,12 @@ public class Student {
 	}
 	@Override
 	public String toString() {
-		return "Student [code=" + code + ", name=" + name + ", homeTown=" + homeTown + ", dateOfBirth=" + dateOfBirth
+		return "Student [code=" + ID + ", name=" + name + ", homeTown=" + homeTown + ", dateOfBirth=" + dateOfBirth
 				+ ", gender=" + gender + ", score1=" + score1 + ", score2=" + score2 + ", score3=" + score3 + "]";
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(code, dateOfBirth, gender, homeTown, name, score1, score2, score3);
+		return Objects.hash(ID, dateOfBirth, gender, homeTown, name, score1, score2, score3);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -91,7 +91,7 @@ public class Student {
 		if (getClass() != obj.getClass())
 			return false;
 		Student other = (Student) obj;
-		return code == other.code && Objects.equals(dateOfBirth, other.dateOfBirth) && gender == other.gender
+		return ID == other.ID && Objects.equals(dateOfBirth, other.dateOfBirth) && gender == other.gender
 				&& Objects.equals(homeTown, other.homeTown) && Objects.equals(name, other.name)
 				&& Float.floatToIntBits(score1) == Float.floatToIntBits(other.score1)
 				&& Float.floatToIntBits(score2) == Float.floatToIntBits(other.score2)

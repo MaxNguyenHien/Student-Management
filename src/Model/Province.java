@@ -13,7 +13,6 @@ public class Province {
 		this.provinceCode = provinceCode;
 		this.provinceName = provinceName;
 	}
-	
 	public int getProvinceCode() {
 		return provinceCode;
 	}
