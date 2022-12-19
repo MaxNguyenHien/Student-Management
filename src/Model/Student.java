@@ -6,7 +6,7 @@ import java.util.Objects;
 public class Student {
 	private int ID;
 	private String name;
-	private String homeTown;
+	private Province homeTown;
 	private Date dateOfBirth;
 	private boolean gender;
 	private float score1;
@@ -15,7 +15,7 @@ public class Student {
 	
 	public Student() {
 	}
-	public Student(int code, String name, String homeTown, Date dateOfBirth, boolean gender, float score1, float score2, float score3) {
+	public Student(int code, String name, Province homeTown, Date dateOfBirth, boolean gender, float score1, float score2, float score3) {
 		this.ID = code;
 		this.name = name;
 		this.homeTown = homeTown;
@@ -37,10 +37,10 @@ public class Student {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getHomeTown() {
+	public Province getHomeTown() {
 		return homeTown;
 	}
-	public void setHomeTown(String homeTown) {
+	public void setHomeTown(Province homeTown) {
 		this.homeTown = homeTown;
 	}
 	public Date getDateOfBirth() {
