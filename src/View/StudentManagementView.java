@@ -16,6 +16,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import java.awt.Font;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.border.BevelBorder;
@@ -39,6 +41,7 @@ public class StudentManagementView extends JFrame {
 	private JPanel contentPane;
 	public StudentManagementModel studentManagementModel;
 	public JTextField textField_ID;
+	private DefaultTableModel model; 
 	public JTable table;
 	public JTextField textField_addID;
 	public JTextField textField_addName;
@@ -49,6 +52,8 @@ public class StudentManagementView extends JFrame {
 	public ButtonGroup btn_Gender;
 	public JComboBox comboBox_HomeTown;
 	public JComboBox comboBox_addHomeTown;
+	public JRadioButton rdbtn_addMale;
+	public JRadioButton rdbtn_addFemale;
 	
 	/**
 	 * Launch the application.
@@ -114,30 +119,29 @@ public class StudentManagementView extends JFrame {
 		
 		JLabel lbl_HomeTown = new JLabel("Home town");
 		lbl_HomeTown.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lbl_HomeTown.setBounds(26, 37, 113, 31);
+		lbl_HomeTown.setBounds(26, 36, 113, 31);
 		contentPane.add(lbl_HomeTown);
 		
 		JLabel lbl_ID = new JLabel("ID");
 		lbl_ID.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lbl_ID.setBounds(427, 42, 32, 26);
+		lbl_ID.setBounds(382, 38, 32, 26);
 		contentPane.add(lbl_ID);
 		
 		textField_ID = new JTextField();
 		textField_ID.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		textField_ID.setBounds(489, 33, 152, 45);
+		textField_ID.setBounds(415, 29, 152, 45);
 		contentPane.add(textField_ID);
 		textField_ID.setColumns(10);
 		
-		JButton btn_Find = new JButton("Find");
-		btn_Find.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btn_Find.setBounds(720, 30, 133, 45);
-		contentPane.add(btn_Find);
+		JButton btn_Search = new JButton("Search");
+		btn_Search.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btn_Search.setBounds(624, 29, 95, 45);
+		contentPane.add(btn_Search);
 		
 		comboBox_HomeTown = new JComboBox();
 		comboBox_HomeTown.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		comboBox_HomeTown.setBounds(149, 30, 204, 45);
+		comboBox_HomeTown.setBounds(134, 29, 204, 45);
 		ArrayList<Province> listProvince = Province.getProvinceList();
-		comboBox_HomeTown.addItem("--Choose province--");
 		for (Province province : listProvince) {
 			comboBox_HomeTown.addItem(province.getProvinceName());
 		}
@@ -152,7 +156,11 @@ public class StudentManagementView extends JFrame {
 		lbl_ListStudent.setBounds(26, 100, 113, 31);
 		contentPane.add(lbl_ListStudent);
 		
-		table = new JTable();
+		table = new JTable() {
+		public boolean isCellEditable(int row, int column) {                
+            return false;
+            };
+		};
 		table.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
@@ -161,6 +169,7 @@ public class StudentManagementView extends JFrame {
 				"ID", "Name", "Home town", "Date", "Gender", "Score 1", "Score 2", "Score 3"
 			}
 		));
+		
 		
 		
 		JScrollPane scrollPane = new JScrollPane(table);
@@ -206,7 +215,6 @@ public class StudentManagementView extends JFrame {
 		comboBox_addHomeTown = new JComboBox();
 		comboBox_addHomeTown.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		comboBox_addHomeTown.setBounds(149, 520, 204, 31);
-		comboBox_addHomeTown.addItem("--Choose province--");
 		for (Province province : listProvince) {
 			comboBox_addHomeTown.addItem(province.getProvinceName());
 		}
@@ -228,14 +236,12 @@ public class StudentManagementView extends JFrame {
 		lbl_addGender.setBounds(471, 441, 73, 26);
 		contentPane.add(lbl_addGender);
 		
-		JRadioButton rdbtn_addMale = new JRadioButton("Male");
-		rdbtn_addMale.addActionListener(action);
+		rdbtn_addMale = new JRadioButton("Male");
 		rdbtn_addMale.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		rdbtn_addMale.setBounds(572, 444, 73, 21);
 		contentPane.add(rdbtn_addMale);
 		
-		JRadioButton rdbtn_addFemale = new JRadioButton("Female");
-		rdbtn_addFemale.addActionListener(action);
+		rdbtn_addFemale = new JRadioButton("Female");
 		rdbtn_addFemale.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		rdbtn_addFemale.setBounds(669, 444, 103, 21);
 		contentPane.add(rdbtn_addFemale);
@@ -313,6 +319,11 @@ public class StudentManagementView extends JFrame {
 		separator_1_2.setBounds(26, 612, 883, 2);
 		contentPane.add(separator_1_2);
 		
+		JButton btn_CancelSearch = new JButton("Cancel");
+		btn_CancelSearch.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btn_CancelSearch.setBounds(729, 29, 95, 45);
+		contentPane.add(btn_CancelSearch);
+		
 		
 		
 		
@@ -335,13 +346,14 @@ public class StudentManagementView extends JFrame {
 	}
 
 	public void insertStudent(Student std) {
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		this.studentManagementModel.insert(std);
-		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		model = (DefaultTableModel) table.getModel();
 		model.addRow(new Object[] {
 				std.getCode()+"",
 				std.getName(),
 				std.getHomeTown().getProvinceName(),
-				std.getDateOfBirth().toString(),
+				df.format(std.getDateOfBirth()),
 				(std.isGender()?"Male":"Female"),
 				std.getScore1()+"",
 				std.getScore2()+"",
@@ -349,12 +361,51 @@ public class StudentManagementView extends JFrame {
 		});	
 	}
 
-	public void updateStudent() {
-		// TODO Auto-generated method stub
+	public void updateStudent(Student std) {
+		int row = table.getSelectedRow();
+		this.studentManagementModel.deleteBaseOnIndex(row);
+		studentManagementModel.insertBaseOnIndex(row,std);
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		model = (DefaultTableModel) table.getModel();
+		
+		model.setValueAt(std.getCode(),row,0);
+		model.setValueAt(std.getName(),row,1);
+		model.setValueAt(std.getHomeTown().getProvinceName(),row,2);
+		model.setValueAt(df.format(std.getDateOfBirth()),row,3);
+		String gender;
+		if(std.isGender()==true) {
+			gender = "Male";
+		}else gender = "Female";
+		model.setValueAt(std.getScore1(),row,5);
+		model.setValueAt(std.getScore2(),row,6);
+		model.setValueAt(std.getScore3(),row,7);
+		
 		
 	}
 
+	public void showStudentInformation() {
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		int row = table.getSelectedRow();
+		textField_addID.setText(model.getValueAt(row, 0)+"");
+		textField_addName.setText(model.getValueAt(row, 1)+"");
+		comboBox_addHomeTown.setSelectedItem(model.getValueAt(row, 2));
+		textField_addDate.setText(model.getValueAt(row, 3)+"");
+		String gender = model.getValueAt(row, 4)+"";
+		if(gender.equals("Male")) {
+			rdbtn_addMale.setSelected(true);
+		}else rdbtn_addFemale.setSelected(true);
+		textField_Score1.setText(model.getValueAt(row, 5)+"");
+		textField_Score2.setText(model.getValueAt(row, 6)+"");
+		textField_Score3.setText(model.getValueAt(row, 7)+"");
+		
+		
+		
+	}
 
-	
-
+	public void deleteStudentInformation() {
+		int row = table.getSelectedRow();
+		this.studentManagementModel.deleteBaseOnIndex(row);
+		model.removeRow(row);
+		
+	}
 }

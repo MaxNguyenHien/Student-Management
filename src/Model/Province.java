@@ -48,6 +48,7 @@ public class Province {
 	
 	public static  ArrayList<Province> getProvinceList(){
 		String [] arr = {
+				"--Choose province--",
 				"An Giang",
 				"Ba Ria – Vung Tau",
 				"Bac Lieu",

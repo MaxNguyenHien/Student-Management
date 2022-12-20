@@ -24,9 +24,16 @@ public class StudentManagementModel {
 	public void insert(Student student) {
 		this.studentList.add(student);
 	}
+	public void insertBaseOnIndex(int n,Student student) {
+		this.studentList.add(n,student);
+	}
+	
 	
 	public void delete(Student student) {
 		this.studentList.remove(student);
+	}
+	public void deleteBaseOnIndex(int n) {
+		this.studentList.remove(n);
 	}
 	
 	public void update(Student student) {

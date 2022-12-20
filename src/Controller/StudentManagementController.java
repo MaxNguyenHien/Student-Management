@@ -23,39 +23,77 @@ public class StudentManagementController implements Action {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String src = e.getActionCommand();
-		JOptionPane.showMessageDialog(SMV, src);
+		//JOptionPane.showMessageDialog(SMV, src);
 		
 		if(src.equals("Insert")) {
 			this.SMV.deleteForm();
 			this.SMV.studentManagementModel.setChoose("Insert");
+			
+			
+			
+		} else if(src.equals("Update")) {
+			this.SMV.studentManagementModel.setChoose("Update");
+			this.SMV.showStudentInformation();
+			
+			
+			
 		} else if(src.equals("Save")) {
 			try {
+				
 				int ID = Integer.valueOf(this.SMV.textField_addID.getText());
 				String name = this.SMV.textField_addName.getText();
 				int homeTown = this.SMV.comboBox_addHomeTown.getSelectedIndex();
 				Province province = Province.getProvinceByCode(homeTown);
 				Date dateOfBirth =new Date (this.SMV.textField_addDate.getText());
 				boolean gender = true;
-				String chooseGender = this.SMV.btn_Gender.getSelection()+"";
-				if(chooseGender.equals("Male")) {
+
+				if(this.SMV.rdbtn_addMale.isSelected()) {
 					gender = true;
-				}else if(chooseGender.equals("Female")) gender = false;
+				}else if(this.SMV.rdbtn_addFemale.isSelected()) 
+					gender = false;
 				float score1 = Float.valueOf(this.SMV.textField_Score1.getText());
 				float score2 = Float.valueOf(this.SMV.textField_Score2.getText());
 				float score3 = Float.valueOf(this.SMV.textField_Score3.getText());
+				
 				Student std = new Student(ID,name,province,dateOfBirth,gender,score1,score2,score3);
+				
 				if(this.SMV.studentManagementModel.getChoose().equals("Insert") || this.SMV.studentManagementModel.getChoose().equals("")) {
 					this.SMV.insertStudent(std);
 				}else if (this.SMV.studentManagementModel.getChoose().equals("Update")){
-					this.SMV.updateStudent();
+					this.SMV.updateStudent(std);
 				}
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
+			this.SMV.deleteForm();
 			
-		}
+			
+			
+		} else if(src.equals("Discard")) {
+			this.SMV.deleteForm();
+			
+			
+			
+		} else if(src.equals("Delete")) {
+			int result = JOptionPane.showConfirmDialog(this.SMV,
+                    "Delete this student?",
+                    "ConFirm",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            if(result == JOptionPane.YES_OPTION){
+            	this.SMV.deleteStudentInformation();
+            }else if (result == JOptionPane.NO_OPTION){   
+            }
+                
+        }
+			
+		
+		
 		
 	}
+	
+	
+	
 
 	@Override
 	public Object getValue(String key) {
