@@ -54,6 +54,14 @@ public class Student {
 	public boolean isGender() {
 		return gender;
 	}
+	public String getGenderStr() {
+		if(this.gender ==  true) {
+			return "Male";
+		} else if(this.gender == false) {
+			return "Female";
+		}
+		return "null";
+	}
 	public void setGender(boolean gender) {
 		this.gender = gender;
 	}

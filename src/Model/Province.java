@@ -118,6 +118,7 @@ public class Province {
 		for (String provinceName : arr) {
 			Province p = new Province(i,provinceName);
 			listProvince.add(p);
+			i++;
 		}
 		
 		return listProvince;
