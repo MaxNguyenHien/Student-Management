@@ -36,37 +36,18 @@ public class StudentManagementController implements Action {
 			this.SMV.showStudentInformation();
 			
 			
-			
 		} else if(src.equals("Save")) {
 			try {
 				
-				int ID = Integer.valueOf(this.SMV.textField_addID.getText());
-				String name = this.SMV.textField_addName.getText();
-				int homeTown = this.SMV.comboBox_addHomeTown.getSelectedIndex();
-				Province province = Province.getProvinceByCode(homeTown);
-				Date dateOfBirth =new Date (this.SMV.textField_addDate.getText());
-				boolean gender = true;
-
-				if(this.SMV.rdbtn_addMale.isSelected()) {
-					gender = true;
-				}else if(this.SMV.rdbtn_addFemale.isSelected()) 
-					gender = false;
-				float score1 = Float.valueOf(this.SMV.textField_Score1.getText());
-				float score2 = Float.valueOf(this.SMV.textField_Score2.getText());
-				float score3 = Float.valueOf(this.SMV.textField_Score3.getText());
-				
-				Student std = new Student(ID,name,province,dateOfBirth,gender,score1,score2,score3);
-				
 				if(this.SMV.studentManagementModel.getChoose().equals("Insert") || this.SMV.studentManagementModel.getChoose().equals("")) {
-					this.SMV.insertStudent(std);
+					this.SMV.insertStudent();
 				}else if (this.SMV.studentManagementModel.getChoose().equals("Update")){
-					this.SMV.updateStudent(std);
+					this.SMV.updateStudent();
 				}
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
 			this.SMV.deleteForm();
-			
 			
 			
 		} else if(src.equals("Discard")) {
@@ -84,7 +65,17 @@ public class StudentManagementController implements Action {
             	this.SMV.deleteStudentInformation();
             }else if (result == JOptionPane.NO_OPTION){   
             }
-                
+             
+            
+            
+        } else if(src.equals("Search")) {
+        	this.SMV.searchStudent();
+        	this.SMV.studentManagementModel.setChoose("Search");
+        } else if(src.equals("Cancel")) {
+        	if(this.SMV.studentManagementModel.getChoose().equals("Search")) {
+        		this.SMV.cancelSearch();
+        	}
+        	this.SMV.studentManagementModel.setChoose("Cancel");
         }
 			
 		
