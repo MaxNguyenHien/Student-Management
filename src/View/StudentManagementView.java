@@ -19,11 +19,14 @@ import java.awt.Font;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Vector;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.Action;
 import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.ComboBoxEditor;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -42,6 +45,7 @@ public class StudentManagementView extends JFrame {
 	public StudentManagementModel studentManagementModel;
 	public JTextField textField_ID;
 	private DefaultTableModel model; 
+	private DefaultTableModel model2; 
 	public JTable table;
 	public JTextField textField_addID;
 	public JTextField textField_addName;
@@ -134,6 +138,7 @@ public class StudentManagementView extends JFrame {
 		textField_ID.setColumns(10);
 		
 		JButton btn_Search = new JButton("Search");
+		btn_Search.addActionListener(action);
 		btn_Search.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btn_Search.setBounds(624, 29, 95, 45);
 		contentPane.add(btn_Search);
@@ -320,6 +325,7 @@ public class StudentManagementView extends JFrame {
 		contentPane.add(separator_1_2);
 		
 		JButton btn_CancelSearch = new JButton("Cancel");
+		btn_CancelSearch.addActionListener(action);
 		btn_CancelSearch.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		btn_CancelSearch.setBounds(729, 29, 95, 45);
 		contentPane.add(btn_CancelSearch);
@@ -345,40 +351,87 @@ public class StudentManagementView extends JFrame {
 		
 	}
 
-	public void insertStudent(Student std) {
-		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-		this.studentManagementModel.insert(std);
+	//Vector vctHeader;
+	
+	public void insertStudent() {
 		model = (DefaultTableModel) table.getModel();
-		model.addRow(new Object[] {
-				std.getCode()+"",
-				std.getName(),
-				std.getHomeTown().getProvinceName(),
-				df.format(std.getDateOfBirth()),
-				(std.isGender()?"Male":"Female"),
-				std.getScore1()+"",
-				std.getScore2()+"",
-				std.getScore3()+"",
-		});	
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		int ID = Integer.valueOf(this.textField_addID.getText());
+		String name = this.textField_addName.getText();
+		int homeTown = this.comboBox_addHomeTown.getSelectedIndex();
+		Province province = Province.getProvinceByCode(homeTown);
+		Date dateOfBirth =new Date (this.textField_addDate.getText());
+		boolean gender = true;
+
+		if(this.rdbtn_addMale.isSelected()) {
+			gender = true;
+		}else if(this.rdbtn_addFemale.isSelected()) 
+			gender = false;
+		float score1 = Float.valueOf(this.textField_Score1.getText());
+		float score2 = Float.valueOf(this.textField_Score2.getText());
+		float score3 = Float.valueOf(this.textField_Score3.getText());
+		
+		Student std = new Student(ID,name,province,dateOfBirth,gender,score1,score2,score3);
+		this.studentManagementModel.insert(std);
+		
+		
+
+			int iDTb = this.studentManagementModel.getStudentList().get(this.studentManagementModel.getStudentList().size()-1).getCode();
+			String nameTb = this.studentManagementModel.getStudentList().get(this.studentManagementModel.getStudentList().size()-1).getName();
+			String homeTownTb = this.studentManagementModel.getStudentList().get(this.studentManagementModel.getStudentList().size()-1).getHomeTown().getProvinceName();
+			String dateOfBirthTb= df.format(this.studentManagementModel.getStudentList().get(this.studentManagementModel.getStudentList().size()-1).getDateOfBirth());
+			String genderTb = this.studentManagementModel.getStudentList().get(this.studentManagementModel.getStudentList().size()-1).isGender()?"Male":"Female";
+			float score1Tb = this.studentManagementModel.getStudentList().get(this.studentManagementModel.getStudentList().size()-1).getScore1();
+			float score2Tb = this.studentManagementModel.getStudentList().get(this.studentManagementModel.getStudentList().size()-1).getScore1();
+			float score3Tb = this.studentManagementModel.getStudentList().get(this.studentManagementModel.getStudentList().size()-1).getScore1();
+			Object[] data = {iDTb,nameTb,homeTownTb,dateOfBirthTb,genderTb,score1Tb,score2Tb,score3Tb};
+			 model.addRow(data);
+		
+		 
+				
+			
 	}
 
-	public void updateStudent(Student std) {
-		int row = table.getSelectedRow();
-		this.studentManagementModel.deleteBaseOnIndex(row);
-		studentManagementModel.insertBaseOnIndex(row,std);
-		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+	public void updateStudent() {
 		model = (DefaultTableModel) table.getModel();
+		int row = table.getSelectedRow();
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		int ID = Integer.valueOf(this.textField_addID.getText());
+		String name = this.textField_addName.getText();
+		int homeTown = this.comboBox_addHomeTown.getSelectedIndex();
+		Province province = Province.getProvinceByCode(homeTown);
+		Date dateOfBirth =new Date (this.textField_addDate.getText());
+		boolean gender = true;
+
+		if(this.rdbtn_addMale.isSelected()) {
+			gender = true;
+		}else if(this.rdbtn_addFemale.isSelected()) 
+			gender = false;
+		float score1 = Float.valueOf(this.textField_Score1.getText());
+		float score2 = Float.valueOf(this.textField_Score2.getText());
+		float score3 = Float.valueOf(this.textField_Score3.getText());
 		
-		model.setValueAt(std.getCode(),row,0);
-		model.setValueAt(std.getName(),row,1);
-		model.setValueAt(std.getHomeTown().getProvinceName(),row,2);
-		model.setValueAt(df.format(std.getDateOfBirth()),row,3);
-		String gender;
-		if(std.isGender()==true) {
-			gender = "Male";
-		}else gender = "Female";
-		model.setValueAt(std.getScore1(),row,5);
-		model.setValueAt(std.getScore2(),row,6);
-		model.setValueAt(std.getScore3(),row,7);
+		Student std = new Student(ID,name,province,dateOfBirth,gender,score1,score2,score3);
+		this.studentManagementModel.deleteBaseOnIndex(row);
+		this.studentManagementModel.insertBaseOnIndex(row,std);
+		
+		
+		
+		
+			int iDTb = this.studentManagementModel.getStudentList().get(row).getCode();
+			String nameTb = this.studentManagementModel.getStudentList().get(row).getName();
+			String homeTownTb = this.studentManagementModel.getStudentList().get(row).getHomeTown().getProvinceName();
+			String dateOfBirthTb= df.format(this.studentManagementModel.getStudentList().get(row).getDateOfBirth());
+			String genderTb = this.studentManagementModel.getStudentList().get(row).isGender()?"Male":"Female";	
+			float score1Tb = this.studentManagementModel.getStudentList().get(row).getScore1();
+			float score2Tb = this.studentManagementModel.getStudentList().get(row).getScore1();
+			float score3Tb = this.studentManagementModel.getStudentList().get(row).getScore1();
+			Object[] data = {iDTb,nameTb,homeTownTb,dateOfBirthTb,genderTb,score1Tb,score2Tb,score3Tb};
+			
+
+			model.removeRow(row);
+			model.insertRow(row, data);
+		
 		
 		
 	}
@@ -398,8 +451,6 @@ public class StudentManagementView extends JFrame {
 		textField_Score2.setText(model.getValueAt(row, 6)+"");
 		textField_Score3.setText(model.getValueAt(row, 7)+"");
 		
-		
-		
 	}
 
 	public void deleteStudentInformation() {
@@ -408,4 +459,58 @@ public class StudentManagementView extends JFrame {
 		model.removeRow(row);
 		
 	}
-}
+	
+	
+	
+	public void searchStudent() {
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		int homeTown = this.comboBox_HomeTown.getSelectedIndex();
+		Province province = Province.getProvinceByCode(homeTown);
+		model = (DefaultTableModel) table.getModel();
+		model.getDataVector().removeAllElements();
+		String idT = this.textField_ID.getText();
+		int iDi = Integer.valueOf(this.textField_ID.getText());
+		for(int i = 0; i < this.studentManagementModel.getStudentList().size(); i++) {
+			if((this.studentManagementModel.getStudentList().get(i).getHomeTown().getProvinceCode() == homeTown && idT.equals(""))
+			||(iDi == this.studentManagementModel.getStudentList().get(i).getCode() && homeTown == 0)
+			|| (this.studentManagementModel.getStudentList().get(i).getHomeTown().getProvinceCode() == homeTown && iDi == this.studentManagementModel.getStudentList().get(i).getCode()))
+			{
+				int iDTb = this.studentManagementModel.getStudentList().get(i).getCode();
+				String nameTb = this.studentManagementModel.getStudentList().get(i).getName();
+				String homeTownTb = this.studentManagementModel.getStudentList().get(i).getHomeTown().getProvinceName();
+				String dateOfBirthTb= df.format(this.studentManagementModel.getStudentList().get(i).getDateOfBirth());
+				String genderTb = this.studentManagementModel.getStudentList().get(i).isGender()?"Male":"Female";
+				float score1Tb = this.studentManagementModel.getStudentList().get(i).getScore1();
+				float score2Tb = this.studentManagementModel.getStudentList().get(i).getScore1();
+				float score3Tb = this.studentManagementModel.getStudentList().get(i).getScore1();
+				Object[] data = {iDTb,nameTb,homeTownTb,dateOfBirthTb,genderTb,score1Tb,score2Tb,score3Tb};
+				 model.addRow(data);
+				
+			}
+		}
+	}
+
+	public void cancelSearch() {
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		model = (DefaultTableModel) table.getModel();
+		model.getDataVector().removeAllElements();
+		for(int i = 0; i < this.studentManagementModel.getStudentList().size(); i++) {	
+				int iDTb = this.studentManagementModel.getStudentList().get(i).getCode();
+				String nameTb = this.studentManagementModel.getStudentList().get(i).getName();
+				String homeTownTb = this.studentManagementModel.getStudentList().get(i).getHomeTown().getProvinceName();
+				String dateOfBirthTb= df.format(this.studentManagementModel.getStudentList().get(i).getDateOfBirth());
+				String genderTb = this.studentManagementModel.getStudentList().get(i).isGender()?"Male":"Female";
+				float score1Tb = this.studentManagementModel.getStudentList().get(i).getScore1();
+				float score2Tb = this.studentManagementModel.getStudentList().get(i).getScore1();
+				float score3Tb = this.studentManagementModel.getStudentList().get(i).getScore1();
+				Object[] data = {iDTb,nameTb,homeTownTb,dateOfBirthTb,genderTb,score1Tb,score2Tb,score3Tb};
+				 model.addRow(data);
+		}
+		
+	}
+				
+			
+			
+		
+	}
+
