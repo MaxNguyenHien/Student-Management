@@ -468,13 +468,11 @@ public class StudentManagementView extends JFrame {
 		Province province = Province.getProvinceByCode(homeTown);
 		model = (DefaultTableModel) table.getModel();
 		model.getDataVector().removeAllElements();
-		String idT = this.textField_ID.getText();
-		int iDi = Integer.valueOf(this.textField_ID.getText());
-		for(int i = 0; i < this.studentManagementModel.getStudentList().size(); i++) {
-			if((this.studentManagementModel.getStudentList().get(i).getHomeTown().getProvinceCode() == homeTown && idT.equals(""))
-			||(iDi == this.studentManagementModel.getStudentList().get(i).getCode() && homeTown == 0)
-			|| (this.studentManagementModel.getStudentList().get(i).getHomeTown().getProvinceCode() == homeTown && iDi == this.studentManagementModel.getStudentList().get(i).getCode()))
-			{
+		String iDT = this.textField_ID.getText();
+		int iDi;
+		if(!this.textField_ID.getText().equals("")) {
+			iDi = Integer.valueOf(this.textField_ID.getText());
+			for(int i = 0; i < this.studentManagementModel.getStudentList().size(); i++) {
 				int iDTb = this.studentManagementModel.getStudentList().get(i).getCode();
 				String nameTb = this.studentManagementModel.getStudentList().get(i).getName();
 				String homeTownTb = this.studentManagementModel.getStudentList().get(i).getHomeTown().getProvinceName();
@@ -483,12 +481,41 @@ public class StudentManagementView extends JFrame {
 				float score1Tb = this.studentManagementModel.getStudentList().get(i).getScore1();
 				float score2Tb = this.studentManagementModel.getStudentList().get(i).getScore1();
 				float score3Tb = this.studentManagementModel.getStudentList().get(i).getScore1();
-				Object[] data = {iDTb,nameTb,homeTownTb,dateOfBirthTb,genderTb,score1Tb,score2Tb,score3Tb};
-				 model.addRow(data);
+				if(this.comboBox_HomeTown.getSelectedIndex() == 0) {
+					if((iDi == this.studentManagementModel.getStudentList().get(i).getCode())) {
+						Object[] data = {iDTb,nameTb,homeTownTb,dateOfBirthTb,genderTb,score1Tb,score2Tb,score3Tb};
+						 model.addRow(data);
+			        }
+				} else if(this.comboBox_HomeTown.getSelectedIndex() != 0) {
+					if((this.studentManagementModel.getStudentList().get(i).getHomeTown().getProvinceCode() == this.comboBox_HomeTown.getSelectedIndex()) 
+							&& (Integer.parseInt(this.textField_ID.getText().trim()) == this.studentManagementModel.getStudentList().get(i).getCode())) {
+						Object[] data = {iDTb,nameTb,homeTownTb,dateOfBirthTb,genderTb,score1Tb,score2Tb,score3Tb};
+						 model.addRow(data);
+					} 
+				}
 				
 			}
-		}
-	}
+		} else { 
+			
+				for(int i = 0; i < this.studentManagementModel.getStudentList().size(); i++) {
+					if (this.studentManagementModel.getStudentList().get(i).getHomeTown().getProvinceCode() == this.comboBox_HomeTown.getSelectedIndex()) {
+					int iDTb = this.studentManagementModel.getStudentList().get(i).getCode();
+					String nameTb = this.studentManagementModel.getStudentList().get(i).getName();
+					String homeTownTb = this.studentManagementModel.getStudentList().get(i).getHomeTown().getProvinceName();
+					String dateOfBirthTb= df.format(this.studentManagementModel.getStudentList().get(i).getDateOfBirth());
+					String genderTb = this.studentManagementModel.getStudentList().get(i).isGender()?"Male":"Female";
+					float score1Tb = this.studentManagementModel.getStudentList().get(i).getScore1();
+					float score2Tb = this.studentManagementModel.getStudentList().get(i).getScore1();
+					float score3Tb = this.studentManagementModel.getStudentList().get(i).getScore1();
+			Object[] data = {iDTb,nameTb,homeTownTb,dateOfBirthTb,genderTb,score1Tb,score2Tb,score3Tb};
+			 model.addRow(data);
+		            }
+			}
+		
+       }
+				 	 
+
+}
 
 	public void cancelSearch() {
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
