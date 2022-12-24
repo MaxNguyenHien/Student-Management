@@ -16,6 +16,7 @@ public class StudentManagementModel {
 		this.choose = "";
 		this.tenFile = "";
 	}
+
 	public String getTenFile() {
 		return tenFile;
 	}
@@ -23,7 +24,7 @@ public class StudentManagementModel {
 	public void setTenFile(String tenFile) {
 		this.tenFile = tenFile;
 	}
-	
+
 	public ArrayList<Student> getStudentList() {
 		return studentList;
 	}
@@ -35,18 +36,19 @@ public class StudentManagementModel {
 	public void insert(Student student) {
 		this.studentList.add(student);
 	}
-	public void insertBaseOnIndex(int n,Student student) {
-		this.studentList.add(n,student);
+
+	public void insertBaseOnIndex(int n, Student student) {
+		this.studentList.add(n, student);
 	}
-	
-	
+
 	public void delete(Student student) {
 		this.studentList.remove(student);
 	}
+
 	public void deleteBaseOnIndex(int n) {
 		this.studentList.remove(n);
 	}
-	
+
 	public void update(Student student) {
 		this.studentList.remove(student);
 		this.studentList.add(student);
@@ -59,5 +61,5 @@ public class StudentManagementModel {
 	public void setChoose(String choose) {
 		this.choose = choose;
 	}
-	
+
 }

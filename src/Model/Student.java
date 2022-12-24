@@ -15,10 +15,12 @@ public class Student implements Serializable {
 	private float score1;
 	private float score2;
 	private float score3;
-	
+
 	public Student() {
 	}
-	public Student(int code, String name, Province homeTown, Date dateOfBirth, boolean gender, float score1, float score2, float score3) {
+
+	public Student(int code, String name, Province homeTown, Date dateOfBirth, boolean gender, float score1,
+			float score2, float score3) {
 		this.ID = code;
 		this.name = name;
 		this.homeTown = homeTown;
@@ -28,71 +30,91 @@ public class Student implements Serializable {
 		this.score2 = score2;
 		this.score3 = score3;
 	}
+
 	public int getCode() {
 		return ID;
 	}
+
 	public void setCode(int code) {
 		this.ID = code;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public Province getHomeTown() {
 		return homeTown;
 	}
+
 	public void setHomeTown(Province homeTown) {
 		this.homeTown = homeTown;
 	}
+
 	public Date getDateOfBirth() {
 		return dateOfBirth;
 	}
+
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
+
 	public boolean isGender() {
 		return gender;
 	}
+
 	public String getGenderStr() {
-		if(this.gender ==  true) {
+		if (this.gender == true) {
 			return "Male";
-		} else if(this.gender == false) {
+		} else if (this.gender == false) {
 			return "Female";
 		}
 		return "null";
 	}
+
 	public void setGender(boolean gender) {
 		this.gender = gender;
 	}
+
 	public float getScore1() {
 		return score1;
 	}
+
 	public void setScore1(float score1) {
 		this.score1 = score1;
 	}
+
 	public float getScore2() {
 		return score2;
 	}
+
 	public void setScore2(float score2) {
 		this.score2 = score2;
 	}
+
 	public float getScore3() {
 		return score3;
 	}
+
 	public void setScore3(float score3) {
 		this.score3 = score3;
 	}
+
 	@Override
 	public String toString() {
 		return "Student [code=" + ID + ", name=" + name + ", homeTown=" + homeTown + ", dateOfBirth=" + dateOfBirth
 				+ ", gender=" + gender + ", score1=" + score1 + ", score2=" + score2 + ", score3=" + score3 + "]";
 	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(ID, dateOfBirth, gender, homeTown, name, score1, score2, score3);
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -108,5 +130,5 @@ public class Student implements Serializable {
 				&& Float.floatToIntBits(score2) == Float.floatToIntBits(other.score2)
 				&& Float.floatToIntBits(score3) == Float.floatToIntBits(other.score3);
 	}
-	
+
 }
