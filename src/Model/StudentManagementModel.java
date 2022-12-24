@@ -1,16 +1,27 @@
 package Model;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class StudentManagementModel {
 	private ArrayList<Student> studentList = new ArrayList<Student>();
 	private String choose = "";
-	
+	private String tenFile = "";
+
 	public StudentManagementModel() {
 	}
 
 	public StudentManagementModel(ArrayList<Student> studentList) {
 		this.studentList = studentList;
+		this.choose = "";
+		this.tenFile = "";
+	}
+	public String getTenFile() {
+		return tenFile;
+	}
+
+	public void setTenFile(String tenFile) {
+		this.tenFile = tenFile;
 	}
 	
 	public ArrayList<Student> getStudentList() {

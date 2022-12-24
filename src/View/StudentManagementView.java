@@ -16,6 +16,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import java.awt.Font;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +36,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
@@ -90,29 +96,35 @@ public class StudentManagementView extends JFrame {
 		setJMenuBar(menuBar);
 		
 		JMenu menu_File = new JMenu("File");
+		menu_File.addActionListener(action);
 		menu_File.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		menuBar.add(menu_File);
 		
 		JMenuItem menu_Open = new JMenuItem("Open");
+		menu_Open.addActionListener(action);
 		menu_Open.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		menu_File.add(menu_Open);
 		
-		JMenuItem menu_Close = new JMenuItem("Close");
-		menu_Close.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		menu_File.add(menu_Close);
+		JMenuItem menu_SaveAndSaveAs = new JMenuItem("Save/Save as");
+		menu_SaveAndSaveAs.addActionListener(action);
+		menu_SaveAndSaveAs.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+		menu_File.add(menu_SaveAndSaveAs);
 		
 		JSeparator separator = new JSeparator();
 		menu_File.add(separator);
 		
 		JMenuItem menu_Exit = new JMenuItem("Exit");
+		menu_Exit.addActionListener(action);
 		menu_Exit.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		menu_File.add(menu_Exit);
 		
 		JMenu menu_About = new JMenu("About");
+		menu_About.addActionListener(action);
 		menu_About.setFont(new Font("Segoe UI", Font.PLAIN, 20));
 		menuBar.add(menu_About);
 		
 		JMenuItem menu_AboutMe = new JMenuItem("About me");
+		menu_AboutMe.addActionListener(action);
 		menu_AboutMe.setFont(new Font("Segoe UI", Font.PLAIN, 18));
 		menu_About.add(menu_AboutMe);
 		contentPane = new JPanel();
@@ -334,6 +346,7 @@ public class StudentManagementView extends JFrame {
 		
 		
 		this.setLocationRelativeTo(null);
+		this.setResizable(false);
 		this.setVisible(true);
 	}
 	
@@ -488,7 +501,7 @@ public class StudentManagementView extends JFrame {
 			        }
 				} else if(this.comboBox_HomeTown.getSelectedIndex() != 0) {
 					if((this.studentManagementModel.getStudentList().get(i).getHomeTown().getProvinceCode() == this.comboBox_HomeTown.getSelectedIndex()) 
-							&& (Integer.parseInt(this.textField_ID.getText().trim()) == this.studentManagementModel.getStudentList().get(i).getCode())) {
+							&& (iDi == this.studentManagementModel.getStudentList().get(i).getCode())) {
 						Object[] data = {iDTb,nameTb,homeTownTb,dateOfBirthTb,genderTb,score1Tb,score2Tb,score3Tb};
 						 model.addRow(data);
 					} 
@@ -517,7 +530,7 @@ public class StudentManagementView extends JFrame {
 
 }
 
-	public void cancelSearch() {
+	public void reloadTable() {
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		model = (DefaultTableModel) table.getModel();
 		model.getDataVector().removeAllElements();
@@ -535,6 +548,86 @@ public class StudentManagementView extends JFrame {
 		}
 		
 	}
+
+	public void showAboutMe() {
+		JOptionPane.showMessageDialog(this, "Student Management App");
+		
+	}
+
+	public void exitWindow() {
+		int result = JOptionPane.showConfirmDialog(this,
+                "Exit?",
+                "Confirm",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        if(result == JOptionPane.YES_OPTION){
+        	System.exit(0);
+        }else if (result == JOptionPane.NO_OPTION){   
+        	
+        }
+		
+	}
+
+	public void saveFile(String tenFile) {
+		try {
+			this.studentManagementModel.setTenFile(tenFile);
+			FileOutputStream fos = new FileOutputStream(tenFile);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			for (Student student : this.studentManagementModel.getStudentList()) {
+				oos.writeObject(student);
+			}
+			oos.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	public void saveFileProcess() {
+		
+		if(this.studentManagementModel.getTenFile().length()>0) {
+			saveFile(this.studentManagementModel.getTenFile());
+		} else {
+			JFileChooser fc = new JFileChooser();
+			int returnVal = fc.showSaveDialog(this);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				File file = fc.getSelectedFile();
+				saveFile(file.getAbsolutePath());
+		    }
+		}
+		
+	}
+
+	public void openFile(String tenFile) {
+		ArrayList<Student> listStudent =  new ArrayList<Student>();
+		try {
+			this.studentManagementModel.setTenFile(tenFile);
+			FileInputStream fis = new FileInputStream(tenFile);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			Student std = null;
+			while((std = (Student) ois.readObject())  != null) {
+				listStudent.add(std);
+			}
+			ois.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		this.studentManagementModel.setStudentList(listStudent);
+	}
+
+	public void openFileProcess() {
+		JFileChooser fc = new JFileChooser();
+		int returnVal = fc.showSaveDialog(this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = fc.getSelectedFile();
+			openFile(file.getAbsolutePath());
+			reloadTable();
+		}
+		
+		
+	}
+
+	
 				
 			
 			

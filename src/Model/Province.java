@@ -1,9 +1,10 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Province {
+public class Province implements Serializable {
 	private int provinceCode;
 	private String provinceName;
 	

@@ -1,11 +1,12 @@
 package Model;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
-public class Student {
+public class Student implements Serializable {
 	private int ID;
 	private String name;
 	private Province homeTown;
