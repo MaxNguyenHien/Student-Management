@@ -42,6 +42,7 @@ import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
 import Controller.StudentManagementController;
+import DAO.StudentDAO;
 
 import javax.swing.JRadioButton;
 
@@ -389,6 +390,8 @@ public class StudentManagementView extends JFrame {
 				.get(this.studentManagementModel.getStudentList().size() - 1).getScore1();
 		Object[] data = { iDTb, nameTb, homeTownTb, dateOfBirthTb, genderTb, score1Tb, score2Tb, score3Tb };
 		model.addRow(data);
+		
+		StudentDAO.getInstance().insert(std);
 
 	}
 
@@ -427,6 +430,8 @@ public class StudentManagementView extends JFrame {
 
 		model.removeRow(row);
 		model.insertRow(row, data);
+		
+		StudentDAO.getInstance().update(std, ID);
 
 	}
 
@@ -451,7 +456,11 @@ public class StudentManagementView extends JFrame {
 	public void deleteStudentInformation() {
 		int row = table.getSelectedRow();
 		this.studentManagementModel.deleteBaseOnIndex(row);
+		Object idValue = model.getValueAt(row, 0);
+		int id = Integer.parseInt(idValue.toString());
+		StudentDAO.getInstance().delete(id);
 		model.removeRow(row);
+		
 
 	}
 
